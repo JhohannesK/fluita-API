@@ -20,6 +20,11 @@ namespace fb_API.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+
+			modelBuilder.Entity<Users>()
+				.HasIndex(u => u.Username)
+				.IsUnique();
+
 			modelBuilder.Entity<Comments>()
 				.HasOne(c => c.User)
 				.WithMany(u => u.Comments)

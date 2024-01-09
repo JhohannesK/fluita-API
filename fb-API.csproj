@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
     <RootNamespace>fb_API</RootNamespace>
+    <UserSecretsId>50cb1501-c131-46f5-b809-069384a5086c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
