@@ -1,14 +1,20 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Net;
 using System.Net.Mail;
 
 namespace fb_API.Services
 {
 	public class EmailService : IEmailSender
 	{
+		private readonly IConfiguration _configuration;
+		public EmailService(IConfiguration config)
+		{
+			_configuration = config;
+		}
 		public Task SendEmailAsync(string email, string subject, string message)
 		{
-			var mail = "johnnartey99@gmail.com";
-			var pw = "mquv estr jpog ajkm";
+			var mail = _configuration["emailService:email"];
+			var pw = _configuration["emailService:emailPassword"];
 
 			var client = new SmtpClient("smtp.gmail.com", 587)
 			{

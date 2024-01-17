@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fb_API.Data;
 
@@ -11,9 +12,11 @@ using fb_API.Data;
 namespace fb_API.Migrations
 {
     [DbContext(typeof(fb_APIContext))]
-    partial class fb_APIContextModelSnapshot : ModelSnapshot
+    [Migration("20240109173830_resetToken")]
+    partial class resetToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,9 +109,6 @@ namespace fb_API.Migrations
 
                     b.Property<string>("ResetToken")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ResetTokenExpiration")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");

@@ -16,6 +16,8 @@ namespace fb_API.Models
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
 		public ICollection<Posts>? Posts { get; set; }
 		public ICollection<Comments>? Comments { get; set; }
+		public string? ResetToken { get; set; }
+		public DateTime? ResetTokenExpiration { get; set; }
 	}
 
 	public class SignUpPayload
@@ -50,6 +52,7 @@ namespace fb_API.Models
 
 	public class ResetPasswordPayload
 	{
+		public required string ResetToken { get; set; }
 		[Required]
 		[DataType(DataType.Password)]
 		public required string Password { get; set; }
@@ -57,5 +60,11 @@ namespace fb_API.Models
 		[DataType(DataType.Password)]
 		[Compare("Password")]
 		public required string ConfirmPassword { get; set; }
+	}
+
+	public class ForgotPasswordPayload
+	{
+		[Required]
+		public required string Username { get; set; }
 	}
 }
