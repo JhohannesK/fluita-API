@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace fb_API.Models
+namespace fluita_API.Models
 {
 	public class Users
 	{

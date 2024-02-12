@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using fb_API.Models;
+using fluita_API.Models;
 
-namespace fb_API.Controllers
+namespace fluita_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

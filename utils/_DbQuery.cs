@@ -1,8 +1,8 @@
-﻿using fb_API.Models;
+﻿using fluita_API.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.SqlClient;
 
-namespace fb_API.utils
+namespace fluita_API.utils
 {
 	public class _DbQuery
 	{

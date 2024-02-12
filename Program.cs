@@ -1,7 +1,7 @@
+using fluita_API;
+using fluita_API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using fb_API;
-using fb_API.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);

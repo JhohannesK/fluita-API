@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using fb_API.Models;
-using fb_API.Services;
 
-namespace fb_API.Controllers
+namespace fluita_API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]

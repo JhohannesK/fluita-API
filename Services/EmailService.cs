@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Mail;
 
-namespace fb_API.Services
+namespace fluita_API.Services
 {
 	public class EmailService : IEmailSender
 	{

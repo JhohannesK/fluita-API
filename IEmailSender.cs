@@ -1,4 +1,4 @@
-﻿namespace fb_API
+﻿namespace fluita_API
 {
 	public interface IEmailSender
 	{
