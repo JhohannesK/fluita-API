@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using fb_API.Data;
 using fb_API.Models;
 
 namespace fb_API.Controllers
@@ -14,95 +13,100 @@ namespace fb_API.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly fb_APIContext _context;
 
-        public PostsController(fb_APIContext context)
+        public PostsController()
         {
-            _context = context;
         }
 
         // GET: api/Posts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Posts>>> GetPosts()
-        {
-            return await _context.Posts.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Posts>>> GetPosts()
+        //{
+        //    return await _context.Posts.ToListAsync();
+        //}
 
-        // GET: api/Posts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Posts>> GetPosts(int id)
-        {
-            var posts = await _context.Posts.FindAsync(id);
+        //// GET: api/Posts/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Posts>> GetPosts(int id)
+        //{
+        //    var posts = await _context.Posts.FindAsync(id);
 
-            if (posts == null)
-            {
-                return NotFound();
-            }
+        //    if (posts == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return posts;
-        }
+        //    return posts;
+        //}
 
-        // PUT: api/Posts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPosts(int id, Posts posts)
-        {
-            if (id != posts.PostId)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/Posts/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutPosts(int id, Posts posts)
+        //{
+        //    if (id != posts.PostId)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(posts).State = EntityState.Modified;
+        //    _context.Entry(posts).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PostsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!PostsExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        // POST: api/Posts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Posts>> PostPosts(Posts posts)
-        {
-            _context.Posts.Add(posts);
-            await _context.SaveChangesAsync();
+        //// POST: api/Posts
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Posts>> PostPosts([FromBody] MakePost post)
+        //{
+        //    var payload = new Posts
+        //    {
+        //        UserId = post.UserId,
+        //        Content = post.Content,
+        //    };
+        //    _context.Posts.Add(payload);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPosts", new { id = posts.PostId }, posts);
-        }
+        //    var res = new { message = "Post was successful." };
 
-        // DELETE: api/Posts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePosts(int id)
-        {
-            var posts = await _context.Posts.FindAsync(id);
-            if (posts == null)
-            {
-                return NotFound();
-            }
+        //    return Ok(res);
+        //}
 
-            _context.Posts.Remove(posts);
-            await _context.SaveChangesAsync();
+        //// DELETE: api/Posts/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeletePosts(int id)
+        //{
+        //    var posts = await _context.Posts.FindAsync(id);
+        //    if (posts == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return NoContent();
-        }
+        //    _context.Posts.Remove(posts);
+        //    await _context.SaveChangesAsync();
 
-        private bool PostsExists(int id)
-        {
-            return _context.Posts.Any(e => e.PostId == id);
-        }
+        //    return NoContent();
+        //}
+
+        //private bool PostsExists(int id)
+        //{
+        //    return _context.Posts.Any(e => e.PostId == id);
+        //}
     }
 }

@@ -20,6 +20,15 @@ namespace fb_API.Models
 		public DateTime? ResetTokenExpiration { get; set; }
 	}
 
+	public class GetUsersModel
+	{
+		public int Id { get; set; }
+		public string Username { get; set; }
+		public string Email { get; set; }
+		public DateTime CreatedAt { get; set; }
+
+	}
+
 	public class SignUpPayload
 	{
 		[Required]
