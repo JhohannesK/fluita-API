@@ -1,7 +1,6 @@
-using fluita_API;
+using fluita_API.@interface;
 using fluita_API.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using fluita_API.utils.Queries;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 //	throw new InvalidOperationException("Connection string 'fb_APIContext' not found.")));
 
 builder.Services.AddTransient<IEmailSender, EmailService>();
+builder.Services.AddTransient<IDbQuery, UserDbQuery>();
 
 // Add services to the container.
 

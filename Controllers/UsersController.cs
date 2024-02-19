@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using fluita_API.Models;
-using fluita_API.Services;
-using Microsoft.Data.SqlClient;
-using fluita_API.utils;
+﻿using Microsoft.AspNetCore.Mvc;
+using fluita_API.@interface;
+using static fluita_API.Models.UserModels;
+using fb_API.Services;
 
 namespace fluita_API.Controllers
 {
@@ -17,154 +11,129 @@ namespace fluita_API.Controllers
     {
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
-        private readonly _DbQuery _DbQuery;
+        private readonly IDbQuery _DbQuery;
         public string connectionString;
 
-        public UsersController( IEmailSender emailSender, IConfiguration configuration, _DbQuery dbQuery)
+        public UsersController( IEmailSender emailSender, IConfiguration configuration, IDbQuery dbQuery)
         {
             _DbQuery = dbQuery;
             _emailSender = emailSender;
             _configuration = configuration;
-            connectionString = _configuration["ConnectionStrings:fb_APIContext"];
+            connectionString = _configuration["ConnectionStrings:fluitaContext"];
         }
 
         // GET: api/Users
         [HttpGet]
-        public ActionResult<IEnumerable<GetUsersModel>> GetUsers()
+        public ActionResult<GetUsersResType<GetUsersModel>> GetUsers()
         {
-            var query = "SELECT * FROM Users";
-
-            using(SqlConnection conn = new SqlConnection(connectionString)) {
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                var users = new List<GetUsersModel>();
-                while (reader.Read())
-                {
-                   users.Add(new GetUsersModel
-                   {
-					   Id = reader.GetInt32(0),
-					   Username = reader.GetString(1),
-					   Email = reader.GetString(2),
-				   });
-                }
-					return Ok(users);
-            }
-            
+           var users = _DbQuery.GetAllUsers();
+            var response = new
+            {
+				message = "Users retrieved successfully",
+				data = users
+			};
+			return Ok(response);
         }
 
         // GET: api/Users/5
-        //[HttpGet("{id}")]
-        //public ActionResult<UserResponse> GetAllUsers(int id)
-        //{
-        //    var users = _DbQuery.GetUserById(id);
+        [HttpGet("{id}")]
+        public ActionResult<GetUsersResType<GetUsersModel>> GetUserById(int id)
+        {
+            var users = _DbQuery.GetUserById(id);
 
-        //    var response = new UserResponse
-        //    {
-        //        Id = users.Id,
-        //        Username = users.Username,
-        //        Email = users.Email,
-        //    };
+            var response = new
+            {
+                message = "User retrieved successfully",
+                data = users
+            };
 
-        //    if (users == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (users == null)
+            {
+                return NotFound("User with such ID not found!!");
+            }
 
-        //    return response;
-        //}
+            return Ok(response);
+        }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutUsers(int id, Users users)
-        //{
-        //    if (id != users.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{id}")]
+        public ActionResult PutUsers(int id, PutUserModel users)
+        {
+             var r = _DbQuery.ChangeUserDetail(id, users);
 
-        //    _context.Entry(users).State = EntityState.Modified;
+            if (r == 0)
+            {
+				return NotFound("User with such ID not found!!");
+			}
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!UsersExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+            var response = new
+            {
+				message = "User updated successfully"
+			};
+            return Ok(response);
+        }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost("signup")]
-        //public async Task<ActionResult<Users>> CreateUser([FromBody] SignUpPayload users)
-        //{
+        [HttpPost("signup")]
+        public async Task<ActionResult> CreateUser([FromBody] SignUpPayload user)
+        {
 
-        //    var HashPassword = PasswordHasher.Hash(users.Password);
-        //    var user = new Users
-        //    {
-        //        Username = users.Username,
-        //        Password = HashPassword,
-        //        Email = users.Email,
-        //    };
-        //    _context.Users.Add(user);
-        //    await _context.SaveChangesAsync();
+            var HashPassword = PasswordHasher.Hash(user.Password);
 
-        //    var response = new
-        //    {
-        //        UserId = user.Id,
-        //        Username = user.Username,
-        //        Email = user.Email,
-        //    };
+            var response = _DbQuery.CreateUser(new SignUpPayload
+			{
+				Username = user.Username,
+				Password = HashPassword,
+				Email = user.Email,
+			});
 
-        //    var receiver = user.Email;
-        //    var subject = "Welcome to Facebook vClone";
-        //    var message = "<h1>Thank you for signing up to Facebook</h1>";
-        //    var res = new { message = "User Created"};
+            var receiver = user.Email;
+            var subject = "Welcome to FLUITA";
+            var message = "<h1>Thank you for signing up to Fluita</h1>";
+            var res = new { message = "User Created" };
 
-        //    await _emailSender.SendEmailAsync(receiver, subject, message);
-        //    //return CreatedAtAction("SignUpUser", new { id = user.Id }, response);
-        //    return Ok(res);
-        //}
+            if (response == -1)
+            {
+				return BadRequest("User already exists!!");
+			}
+            await _emailSender.SendEmailAsync(receiver, subject, message);
+            //return CreatedAtAction("SignUpUser", new { id = user.Id }, response);
+            return Ok(res);
+        }
 
-        // POST: api/Users/login
-        //      [HttpPost("login")]
-        //      public async Task<ActionResult<Users>> LoginUser([FromBody] LoginPayload users)
-        //      {
-        //	var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == users.Username);
-        //	if (user == null)
-        //          {
-        //              var message = new { message = "User does not exist!!" };
-        //		return NotFound(message);
-        //	}
+        //POST: api/Users/login
+        [HttpPost("login")]
+		public ActionResult<GetUsersResType<GetUsersModel>> LoginUser([FromBody] LoginPayload users)
+        {
+            var user = _DbQuery.GetUserByUsername(users.Username);
+            if (user == null)
+            {
+                var message = new { message = "User does not exist!!" };
+                return NotFound(message);
+            }
 
-        //	var isValid = PasswordHasher.Verify(users.Password, user.Password);
-        //	if (!isValid)
-        //          {
-        //		return BadRequest(new { message = "Invalid Credentials" });
-        //	}
+            var isValid = PasswordHasher.Verify(users.Password, user.Password);
+            if (!isValid)
+            {
+                return BadRequest(new { message = "Invalid Credentials" });
+            }
 
-        //	var response = new
-        //          {
-        //		UserId = user.Id,
-        //		Username = user.Username,
-        //		Email = user.Email,
-        //	};
+            var a = new GetUsersModel
+            {
+                Username = user.Username,
+                Id = user.Id,
+                Email = user.Email,
+                CreatedAt = user.CreatedAt
+            };
 
-        //	return Ok(response);
-        //}
+            var response = new
+            {
+				message = "User logged in successfully",
+				data = a
+			};
+
+            return Ok(response);
+        }
 
         // DELETE: api/Users/5
         //[HttpDelete("{id}")]

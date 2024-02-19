@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace fluita_API.Models
+namespace fluita_API.Entities
 {
 	public class Posts
 	{
@@ -15,9 +15,5 @@ namespace fluita_API.Models
 		public IEnumerable<Comments>? Comments { get; set; }
 	}
 
-	public class MakePost
-	{
-		public required int UserId;
-		public required string Content;
-	}
+	
 }

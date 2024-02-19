@@ -1,10 +1,10 @@
-﻿using System.Configuration;
+﻿using fluita_API.@interface;
 using System.Net;
 using System.Net.Mail;
 
 namespace fluita_API.Services
 {
-	public class EmailService : IEmailSender
+    public class EmailService : IEmailSender
 	{
 		private readonly IConfiguration _configuration;
 		public EmailService(IConfiguration config)
